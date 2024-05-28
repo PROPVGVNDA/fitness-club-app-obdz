@@ -1,39 +1,31 @@
-from pymongo import MongoClient
+from models import Trainer, Client, Membership, Class, Record
 
-def run_population(client):
-    db = client.fitness_club
-    
+def run_population():
     trainers = [
-        {"_id": 1, "name": "John Doe", "specialty": "Cardio"},
-        {"_id": 2, "name": "Jane Smith", "specialty": "Yoga"}
+        Trainer(name="John Doe", specialty="Cardio").save(),
+        Trainer(name="Jane Smith", specialty="Yoga").save()
     ]
     
     clients = [
-        {"_id": 1, "name": "Alice", "age": 28, "memberships": [1]},
-        {"_id": 2, "name": "Bob", "age": 35, "memberships": [2]},
-        {"_id": 3, "name": "Jack", "age": 17, "memberships": [2]}
+        Client(name="Alice", age=28, memberships=[1]).save(),
+        Client(name="Bob", age=35, memberships=[2]).save(),
+        Client(name="Jack", age=17, memberships=[2]).save()
     ]
     
     memberships = [
-        {"_id": 1, "type": "Monthly", "price": 50},
-        {"_id": 2, "type": "Annual", "price": 500}
+        Membership(type="Monthly", price=50).save(),
+        Membership(type="Annual", price=500).save()
     ]
     
     classes = [
-        {"_id": 1, "name": "Morning Yoga", "trainer_id": 2, "clients": [1]},
-        {"_id": 2, "name": "Evening Cardio", "trainer_id": 1, "clients": [2]},
-        {"_id": 3, "name": "Weights", "trainer_id": 1, "clients": [1, 2]}
+        Class(name="Morning Yoga", trainer=trainers[1], clients=[clients[0]]).save(),
+        Class(name="Evening Cardio", trainer=trainers[0], clients=[clients[1]]).save(),
+        Class(name="Weights", trainer=trainers[0], clients=[clients[0], clients[1]]).save()
     ]
     
     records = [
-        {"_id": 1, "client_id": 1, "class_id": 1, "date": "2024-05-01"},
-        {"_id": 2, "client_id": 2, "class_id": 2, "date": "2024-05-02"}
+        Record(client=clients[0], class_id=classes[0], date="2024-05-01").save(),
+        Record(client=clients[1], class_id=classes[1], date="2024-05-02").save()
     ]
 
-    db.trainers.insert_many(trainers)
-    db.clients.insert_many(clients)
-    db.memberships.insert_many(memberships)
-    db.classes.insert_many(classes)
-    db.records.insert_many(records)
-    
     print("Test data population completed.")

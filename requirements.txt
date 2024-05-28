@@ -1,1 +1,1 @@
-pymongo
+mongoengine==0.28.2
